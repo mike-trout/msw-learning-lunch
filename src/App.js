@@ -1,26 +1,37 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { getQuote } from './services/quote';
 import logo from './logo.svg';
 import './App.css';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const mounted = useRef(true);
+
+    const [quote, setQuote] = useState({
+        author: '',
+        content: '',
+    });
+
+    useEffect(() => {
+        getQuote().then((q) => {
+            if (mounted.current) setQuote(q);
+        });
+    }, []);
+
+    useEffect(() => {
+        return function cleanUp() {
+            mounted.current = false;
+        };
+    }, []);
+
+    return (
+        <div className="App">
+            <header className="App-header">
+                <img src={logo} className="App-logo" alt="logo" />
+                <q id="quote-content">{quote.content}</q>&mdash;
+                <i id="quote-author">{quote.author}</i>
+            </header>
+        </div>
+    );
 }
 
 export default App;

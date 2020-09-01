@@ -1,0 +1,8 @@
+{
+    "globals": {
+        "$": true,
+        "$$": true,
+        "browser": true,
+        "driver": true
+    }
+}
